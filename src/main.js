@@ -36,7 +36,70 @@ const EXPLAIN = {
     Ghia et al. (1982) in this project's <a href="validation.html">validation suite</a>.`,
 };
 
-const NS_EQ = `<div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p/ρ + ν∇²<b>u</b> + <b>f</b>,&nbsp;&nbsp; ∇·<b>u</b> = 0</div>
+// per-preset specialization of Navier-Stokes: which terms are on, off, and why
+const EQNS = {
+  tunnel: `<h3>The equations, specialized</h3>
+    <div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p + ν∇²<b>u</b>, &nbsp; ∇·<b>u</b> = 0</div>
+    <ul class="terms">
+    <li><b>(u·∇)u</b> — the star here: vortex shedding is pure advective nonlinearity.
+      A linear equation would give a steady, boring wake.</li>
+    <li><b>ν∇²u</b> — small but decisive: ν = UD/Re sets Re ≈ 200. Below Re ≈ 47 viscosity
+      wins and the wake stays steady; above, the street appears.</li>
+    <li><b>f = 0</b> — no body force. The flow is driven entirely by the boundary
+      condition u = U at the inflow edge.</li>
+    <li><b>Boundaries do the work</b>: inflow (left), outflow p = 0 (right), free-slip
+      walls, no-slip cylinder surface.</li></ul>`,
+  rt: `<h3>The equations, specialized</h3>
+    <div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p + B·s·ŷ<br>∂s/∂t + (<b>u</b>·∇)s = 0</div>
+    <ul class="terms">
+    <li><b>f = B·s·ŷ, B &lt; 0</b> — Boussinesq buoyancy: density enters only as a
+      force proportional to the transported field s (1 = heavy, 0 = light). Heavy gets
+      pulled down; that force imbalance at the tilted interface IS the instability.</li>
+    <li><b>A second equation appears</b> — s is advected with the flow, so NS becomes a
+      coupled two-field system. The mushroom shapes are s being folded by u while s
+      drives u.</li>
+    <li><b>Uniform gravity is invisible</b> — the constant part of gravity is cancelled
+      by hydrostatic pressure; only the s-dependent difference matters.</li>
+    <li><b>ν∇²u dropped</b> — effectively inviscid; the roll-ups sharpen until the grid
+      scale intervenes.</li></ul>`,
+  plume: `<h3>The equations, specialized</h3>
+    <div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p + B·s·ŷ + ε(N̂×ω)<br>∂s/∂t + (<b>u</b>·∇)s = S(x) − λs</div>
+    <ul class="terms">
+    <li><b>f = +B·s·ŷ, B &gt; 0</b> — same Boussinesq term as Rayleigh–Taylor but with
+      the sign flipped: hot fluid (s = 1) rises instead of sinking.</li>
+    <li><b>S(x)</b> — a continuous source at the base keeps injecting s; λ is a slow
+      decay. Unlike RT (one-shot initial condition), this reaches a statistically steady
+      churn.</li>
+    <li><b>ε(N̂×ω)</b> — vorticity confinement, an extra <i>numerical</i> force that
+      re-injects the subgrid swirl the grid smears out. Physics off, beauty on — set the
+      slider to 0 to see the difference.</li></ul>`,
+  shear: `<h3>The equations, specialized</h3>
+    <div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p, &nbsp; ∇·<b>u</b> = 0</div>
+    <ul class="terms">
+    <li><b>This is the Euler equation</b> — ν = 0 and f = 0: nothing drives or damps the
+      flow. Everything you see is stored in the initial condition and released by the
+      advective nonlinearity.</li>
+    <li><b>The instability needs no push</b> — a velocity jump plus an infinitesimal
+      ripple grows exponentially (rate ∝ shear × wavenumber). The seed here is a tiny
+      sinusoidal v-perturbation, mode 4 — count the vortices.</li>
+    <li><b>Dye is passive</b> — s rides along (∂s/∂t + u·∇s = 0) but exerts no force
+      back, unlike Rayleigh–Taylor where s drives the flow.</li></ul>`,
+  cavity: `<h3>The equations, specialized</h3>
+    <div class="eq">(<b>u</b>·∇)<b>u</b> = −∇p + ν∇²<b>u</b> &nbsp; (steady state, ∂u/∂t → 0)</div>
+    <ul class="terms">
+    <li><b>ν∇²u is the protagonist</b> — ν = UL/Re with Re = 1000. It sets the boundary
+      layer thickness (~L/√Re) and the corner eddies; get it slightly wrong and the
+      Ghia profiles won't match.</li>
+    <li><b>f = 0, driving is a boundary condition</b> — the lid slides at u = 1 and
+      drags fluid via the no-slip condition; the walls' ghost values enter through the
+      viscous term.</li>
+    <li><b>Time-marched to equilibrium</b> — the solver runs unsteady NS until ∂u/∂t
+      ≈ 0; that steady balance of advection, pressure and viscosity is what the
+      validation suite compares against Ghia et al. (1982).</li></ul>`,
+};
+
+const NS_EQ = `<h3>General form &amp; solver</h3>
+  <div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p/ρ + ν∇²<b>u</b> + <b>f</b>,&nbsp;&nbsp; ∇·<b>u</b> = 0</div>
   <p>Solved with Chorin projection: MacCormack (BFECC) advection → forces → viscous
   diffusion → pressure Poisson solve (red–black Gauss–Seidel + SOR) → projection to a
   divergence-free field. Staggered MAC grid, all stages WebGPU compute shaders.</p>`;
@@ -99,7 +162,7 @@ function loadPreset(key) {
   $('epsVC').value = preset.cfg.epsVC;
   $('iters').value = preset.cfg.iters;
   $('speed').value = preset.stepsPerFrame;
-  $('explain-body').innerHTML = EXPLAIN[key] + NS_EQ;
+  $('explain-body').innerHTML = EXPLAIN[key] + EQNS[key] + NS_EQ;
   $('readout').textContent = '';
 }
 
