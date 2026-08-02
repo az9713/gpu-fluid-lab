@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Navier–Stokes Equations, Term by Term</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🌀</text></svg>">
+<!-- Set theme before first paint to avoid a light flash -->
+<script>
+(function(){ try{
+  var t = localStorage.getItem('theme');
+  if(!t && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
+  if(t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+}catch(e){} })();
+</script>
 <!-- MathJax v3, SVG output. One CDN line; needs network on first open. -->
 <script>
 window.MathJax = {
@@ -16,8 +24,12 @@ window.MathJax = {
   integrity="sha384-msWocAZtTDh+149KSxjbRTGVfGbDjiff/j0JX1iu/A/GxxTWSu6ozNemlfkag/8d"
   crossorigin="anonymous"></script>
 <style>
-  :root{ --fg:#1a1a1a; --muted:#555; --accent:#7a1f1f; --rule:#ddd; --box:#f6f4ef; }
-  html{ -webkit-text-size-adjust:100%; }
+  :root{ --fg:#1a1a1a; --muted:#555; --accent:#7a1f1f; --rule:#ddd; --box:#f6f4ef;
+         --codebg:#f3f1ec; --btn:#fff; --key-bg:#fdf7e3; --key-border:#e3d27a; color-scheme:light; }
+  html[data-theme=dark]{ --fg:#d6d2c9; --muted:#9a958c; --accent:#d98f8f; --rule:#3d3a36; --box:#252320;
+         --codebg:#252320; --btn:#2c2a26; --key-bg:#2b2617; --key-border:#6b5a1e; color-scheme:dark; }
+  html{ -webkit-text-size-adjust:100%; background:#fff; }
+  html[data-theme=dark]{ background:#171614; }
   body{ max-width: 50rem; margin: 2.5rem auto; padding: 0 1.25rem 6rem;
         font: 16px/1.65 Georgia, 'Times New Roman', serif; color:var(--fg); counter-reset: fig; }
   h1{ font-size: 1.9rem; line-height:1.2; margin:.2rem 0 .2rem; }
@@ -26,19 +38,19 @@ window.MathJax = {
   .sub{ color:var(--muted); font-style:italic; margin-top:0; }
   .nav{ font-size:.9rem; color:var(--muted); margin:.1rem 0 1rem; }
   .nav a{ color:var(--accent); }
-  code{ font-family: ui-monospace,'SFMono-Regular',Consolas,monospace; font-size:.92em; background:#f3f1ec; padding:.05rem .25rem; border-radius:3px; }
-  pre{ background:#f3f1ec; padding:.8rem 1rem; border-radius:5px; overflow:auto; font-size:.84rem; line-height:1.45; }
+  code{ font-family: ui-monospace,'SFMono-Regular',Consolas,monospace; font-size:.92em; background:var(--codebg); padding:.05rem .25rem; border-radius:3px; }
+  pre{ background:var(--codebg); padding:.8rem 1rem; border-radius:5px; overflow:auto; font-size:.84rem; line-height:1.45; }
   pre code{ background:none; padding:0; }
   .codewrap{ position:relative; }
   .copybtn{ position:absolute; top:.5rem; right:.5rem; display:inline-flex; align-items:center; gap:.3rem;
     font:600 .72rem/1 ui-monospace,Consolas,monospace; color:var(--muted);
-    background:#fff; border:1px solid var(--rule); border-radius:5px; padding:.32rem .5rem; cursor:pointer; }
+    background:var(--btn); border:1px solid var(--rule); border-radius:5px; padding:.32rem .5rem; cursor:pointer; }
   .copybtn:hover{ color:var(--accent); border-color:var(--accent); }
   .copybtn.copied{ color:#2a7d2a; border-color:#2a7d2a; }
   .copybtn svg{ width:13px; height:13px; }
   .thm,.def,.lem,.prop{ background:var(--box); border-left:4px solid var(--accent); padding:.6rem .9rem; margin:1rem 0; border-radius:0 4px 4px 0; }
   .thm b,.def b,.lem b,.prop b{ color:var(--accent); }
-  .proof{ border-left:2px solid var(--rule); padding-left:.9rem; margin:.8rem 0 1.2rem; color:#222; }
+  .proof{ border-left:2px solid var(--rule); padding-left:.9rem; margin:.8rem 0 1.2rem; color:var(--fg); }
   .proof::before{ content:"Proof."; font-style:italic; font-weight:bold; margin-right:.4rem; }
   .qed{ float:right; }
   table{ border-collapse:collapse; width:100%; margin:1rem 0; font-size:.95rem; }
@@ -61,12 +73,23 @@ window.MathJax = {
   .toc ul{ list-style:none; padding-left:.3rem; margin:.3rem 0; } .toc a{ color:var(--accent); text-decoration:none; }
   .small{ font-size:.88rem; color:var(--muted); }
   hr{ border:none; border-top:1px solid var(--rule); margin:2.5rem 0; }
-  .keyresult{ background:#fdf7e3; border:1px solid #e3d27a; padding:.5rem .9rem; border-radius:4px; margin:1rem 0; }
+  .keyresult{ background:var(--key-bg); border:1px solid var(--key-border); padding:.5rem .9rem; border-radius:4px; margin:1rem 0; }
   .runlink{ display:inline-block; background:var(--box); border:1px solid var(--rule); border-radius:5px;
     padding:.25rem .7rem; font-size:.9rem; }
+  /* ponytail: figures are SVGs drawn for light paper — in dark mode keep them on a white card
+     instead of restyling every SVG; captions inside the card stay pinned to light-mode colors */
+  html[data-theme=dark] figure{ background:#fff; border-radius:6px; padding:.6rem .4rem .5rem; }
+  html[data-theme=dark] figcaption{ color:#555; }
+  html[data-theme=dark] figcaption::before{ color:#7a1f1f; }
+  .themebtn{ position:fixed; top:.9rem; right:.9rem; z-index:10; width:2.3rem; height:2.3rem;
+    font-size:1.05rem; line-height:1; background:var(--btn); color:var(--fg);
+    border:1px solid var(--rule); border-radius:50%; cursor:pointer; }
+  .themebtn:hover{ border-color:var(--accent); }
 </style>
 </head>
 <body>
+
+<button class="themebtn" id="themebtn" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
 
 <!-- shared arrowhead + marker defs, referenced by every figure (ids are global) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -1715,6 +1738,17 @@ polyline, and animation keyframe and splices them into this page. References: S.
 <i>Math.&nbsp;Comp.</i> <b>22</b>, 745 (1968).</p>
 
 <script>
+function themeIcon(){
+  document.getElementById('themebtn').textContent =
+    document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  var r = document.documentElement, dark = r.getAttribute('data-theme') === 'dark';
+  if(dark) r.removeAttribute('data-theme'); else r.setAttribute('data-theme','dark');
+  try{ localStorage.setItem('theme', dark ? 'light' : 'dark'); }catch(e){}
+  themeIcon();
+}
+themeIcon();
 function copyCode(btn){
   var code = btn.parentElement.querySelector('code');
   if(!code) return;
