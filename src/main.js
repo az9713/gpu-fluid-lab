@@ -216,7 +216,9 @@ $('explain-close').addEventListener('click', () => $('explain').classList.remove
     o.value = k; o.textContent = p.label;
     sel.appendChild(o);
   }
-  loadPreset('tunnel');
+  const q = new URLSearchParams(location.search);
+  loadPreset(PRESETS[q.get('preset')] ? q.get('preset') : 'tunnel');
+  if (['0', '1', '2', '3'].includes(q.get('view'))) $('mode').value = q.get('view');
   window.__sim = () => sim; // for headless checks
   requestAnimationFrame(frame);
 })();
