@@ -4,8 +4,17 @@ Real-time 2D incompressible Navier–Stokes, solved entirely in WebGPU compute s
 validated against published CFD benchmarks. Runs in Chrome/Edge 113+, deployable as a
 static site (GitHub Pages friendly) — no build step, no dependencies.
 
-**Open `index.html`** (serve the folder over HTTP: `python -m http.server`) — ES modules
-don't load from `file://`.
+**▶ Live: [az9713.github.io/gpu-fluid-lab](https://az9713.github.io/gpu-fluid-lab/)** ·
+[validation suite](https://az9713.github.io/gpu-fluid-lab/validation.html)
+(locally: serve the folder over HTTP, e.g. `python -m http.server` — ES modules don't load from `file://`).
+
+## Gallery — click any image to run it live
+
+| | |
+|---|---|
+| [![Kármán vortex street](screenshots/karman-vortex-street.png)](https://az9713.github.io/gpu-fluid-lab/) <br>*Kármán vortex street — dye stripes, Re≈200* | [![Vorticity view](screenshots/vorticity-view.png)](https://az9713.github.io/gpu-fluid-lab/) <br>*Same wake in the vorticity view* |
+| [![Rayleigh–Taylor](screenshots/rayleigh-taylor.png)](https://az9713.github.io/gpu-fluid-lab/) <br>*Rayleigh–Taylor mushroom fingers* | [![Kelvin–Helmholtz](screenshots/kelvin-helmholtz.png)](https://az9713.github.io/gpu-fluid-lab/) <br>*Kelvin–Helmholtz vortex chains* |
+| [![Buoyant plume](screenshots/buoyant-plume.png)](https://az9713.github.io/gpu-fluid-lab/) <br>*Buoyant smoke plume* | [![Validation suite](screenshots/validation-suite.png)](https://az9713.github.io/gpu-fluid-lab/validation.html) <br>*Validation suite — all benchmarks green* |
 
 ## What you get
 
