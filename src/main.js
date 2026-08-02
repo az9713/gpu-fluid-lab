@@ -98,6 +98,31 @@ const EQNS = {
       validation suite compares against Ghia et al. (1982).</li></ul>`,
 };
 
+// what the current render mode displays — changes with the View dropdown
+const VIEWS = {
+  0: `<h3>What this view shows: dye</h3>
+    <p>A passive tracer painted into the fluid and carried along (∂s/∂t + <b>u</b>·∇s = 0).
+    Bright = concentrated, dark = clear, on an inferno colormap. Dye doesn't push back on
+    the flow — it's the smoke in a real wind tunnel: it only reveals where the fluid goes
+    and how it folds.</p>`,
+  1: `<h3>What this view shows: speed</h3>
+    <p>The magnitude |<b>u</b>| of the velocity field — bright yellow is fast, deep purple
+    is stalled. Look for stagnation points (dark spots where flow hits an obstacle head-on)
+    and thin fast jets squeezed around edges.</p>`,
+  2: `<h3>What this view shows: vorticity</h3>
+    <p>ω = ∂v/∂x − ∂u/∂y — the local spin of the fluid, invisible in the dye view.
+    <span style="color:#ff7b72">Red = counter-clockwise</span>,
+    <span style="color:#58a6ff">blue = clockwise</span>, white = no rotation. Vortices appear
+    as compact blobs, shear layers as thin sheets of one color. In the wind tunnel the
+    street's alternating red/blue signature is the cleanest way to see the shedding rhythm
+    — this is the view CFD people actually work in.</p>`,
+  3: `<h3>What this view shows: pressure</h3>
+    <p>The pressure field the projection step computes to keep the flow incompressible.
+    High (red) at stagnation points where flow rams into surfaces, low (blue) inside vortex
+    cores — the low-pressure suction is what holds a vortex together, and the front-to-back
+    pressure difference on an obstacle IS its drag.</p>`,
+};
+
 const NS_EQ = `<h3>General form &amp; solver</h3>
   <div class="eq">∂<b>u</b>/∂t + (<b>u</b>·∇)<b>u</b> = −∇p/ρ + ν∇²<b>u</b> + <b>f</b>,&nbsp;&nbsp; ∇·<b>u</b> = 0</div>
   <p>Solved with Chorin projection: MacCormack (BFECC) advection → forces → viscous
@@ -162,8 +187,13 @@ function loadPreset(key) {
   $('epsVC').value = preset.cfg.epsVC;
   $('iters').value = preset.cfg.iters;
   $('speed').value = preset.stepsPerFrame;
-  $('explain-body').innerHTML = EXPLAIN[key] + EQNS[key] + NS_EQ;
+  renderExplainer();
   $('readout').textContent = '';
+}
+
+function renderExplainer() {
+  $('explain-body').innerHTML =
+    EXPLAIN[presetKey] + VIEWS[+$('mode').value] + EQNS[presetKey] + NS_EQ;
 }
 
 // ---- mouse ----
@@ -242,6 +272,7 @@ function frame() {
 
 // ---- UI ----
 $('preset').addEventListener('change', e => loadPreset(e.target.value));
+$('mode').addEventListener('change', renderExplainer);
 $('restart').addEventListener('click', () => loadPreset(presetKey));
 $('pause').addEventListener('click', () => {
   paused = !paused;
@@ -282,7 +313,7 @@ $('explain-close').addEventListener('click', () => $('explain').classList.remove
   }
   const q = new URLSearchParams(location.search);
   loadPreset(PRESETS[q.get('preset')] ? q.get('preset') : 'tunnel');
-  if (['0', '1', '2', '3'].includes(q.get('view'))) $('mode').value = q.get('view');
+  if (['0', '1', '2', '3'].includes(q.get('view'))) { $('mode').value = q.get('view'); renderExplainer(); }
   window.__sim = () => sim; // for headless checks
   requestAnimationFrame(frame);
 })();
