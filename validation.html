@@ -13,16 +13,37 @@
   #status.pass { border-color:#3fb950; color:#3fb950; }
   #status.fail { border-color:#ff7b72; color:#ff7b72; }
   pre { white-space:pre-wrap; color:#9198a1; }
+  .intro { color:#c9d1d9; font-family:-apple-system,"Segoe UI",sans-serif; max-width:70rem; }
+  .card { background:#161b22; border:1px solid #30363d; border-radius:10px;
+    padding:.8rem 1.1rem; margin:.7rem 0; max-width:70rem; }
+  .card p { margin:.4rem 0 .6rem; color:#9198a1; font-family:-apple-system,"Segoe UI",sans-serif; }
+  .card-head { display:flex; justify-content:space-between; align-items:baseline; }
+  .card-head b { color:#e6edf3; }
+  .stat { font-size:.85rem; color:#9198a1; }
+  .card.running { border-color:#58a6ff; } .card.running .stat { color:#58a6ff; }
+  .card.pass { border-color:#3fb950; } .card.pass .stat { color:#3fb950; }
+  .card.fail { border-color:#ff7b72; } .card.fail .stat { color:#ff7b72; }
+  .bar { height:6px; background:#21262d; border-radius:3px; overflow:hidden; }
+  .fill { height:100%; width:0%; background:#58a6ff; transition:width .3s; }
+  .card.pass .fill { background:#3fb950; } .card.fail .fill { background:#ff7b72; }
+  .detail { font-size:.8rem; color:#9198a1; margin-top:.35rem; min-height:1em; }
 </style>
 </head>
 <body>
 <h1>GPU Fluid Dynamics Lab — validation suite <a href="index.html" style="float:right;font-weight:normal">← back to lab</a></h1>
-<p>Benchmarks the solver against published references: Ghia et&nbsp;al. (1982) lid-driven cavity
-centerline profiles at Re=100 and Re=1000, vortex-shedding Strouhal number vs the empirical
-relation St = 0.198(1 − 19.7/Re), and pressure-projection divergence removal.
-Runs take a few minutes; progress below. Append <code>?fast</code> for a quick smoke run.</p>
-<div id="status">running…</div>
+<div class="intro">
+<p><b>What is this?</b> Most browser fluid demos only prove that they <i>render</i>. This page
+proves the solver gets the <i>physics</i> right, by re-running classic experiments from the CFD
+literature and comparing the numbers — the same way a research code is qualified. Nothing is
+drawn during the runs (the simulations execute headless on your GPU); each card below shows
+what is being tested, why it matters, and live progress. The full suite takes roughly
+15–25 minutes depending on your GPU. Append <code>?fast</code> to the URL for a ~4-minute smoke run.</p>
+<p>A benchmark passes when the simulated numbers land within the stated tolerance of the
+published reference. Any failure turns the banner red.</p>
+</div>
+<div id="status">initializing WebGPU…</div>
+<div id="tests"></div>
 <pre id="log"></pre>
-<script type="module" src="src/validate.js?v=2"></script>
+<script type="module" src="src/validate.js?v=3"></script>
 </body>
 </html>
