@@ -89,6 +89,7 @@ function draw() {
 
 function loadPreset(key) {
   presetKey = key;
+  if ($('preset').value !== key) $('preset').value = key;
   if (sim) sim.destroy();
   preset = PRESETS[key];
   sim = new Sim(device, { ...preset.cfg });
