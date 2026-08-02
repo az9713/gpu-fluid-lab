@@ -1,6 +1,6 @@
-import { initGPU } from './webgpu.js';
-import { Sim, presets } from './solver.js';
-import { RENDER } from './shaders.js';
+import { initGPU } from './webgpu.js?v=2';
+import { Sim, presets } from './solver.js?v=2';
+import { RENDER } from './shaders.js?v=2';
 
 const $ = id => document.getElementById(id);
 const canvas = $('view');

@@ -1,5 +1,5 @@
-import * as S from './shaders.js';
-import { buf, pipe, dispatch, readBuffer } from './webgpu.js';
+import * as S from './shaders.js?v=2';
+import { buf, pipe, dispatch, readBuffer } from './webgpu.js?v=2';
 
 export const WALL = 0, INFLOW = 1, OUTFLOW = 2;
 

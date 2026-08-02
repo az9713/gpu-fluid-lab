@@ -1,8 +1,8 @@
 // Validation suite: Ghia et al. (1982) lid-driven cavity + Strouhal vortex shedding
 // + projection sanity. Runs headless (no rendering), prints JSON for CI scraping.
-import { initGPU } from './webgpu.js';
-import { Sim, WALL, INFLOW, OUTFLOW } from './solver.js';
-import { GHIA } from './ghia.js';
+import { initGPU } from './webgpu.js?v=2';
+import { Sim, WALL, INFLOW, OUTFLOW } from './solver.js?v=2';
+import { GHIA } from './ghia.js?v=2';
 
 const logEl = document.getElementById('log');
 const log = m => { logEl.textContent += m + '\n'; console.log(m); };
