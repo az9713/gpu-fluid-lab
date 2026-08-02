@@ -5,6 +5,7 @@ validated against published CFD benchmarks. Runs in Chrome/Edge 113+, deployable
 static site (GitHub Pages friendly) — no build step, no dependencies.
 
 **▶ Live: [az9713.github.io/gpu-fluid-lab](https://az9713.github.io/gpu-fluid-lab/)** ·
+[equations tutorial](https://az9713.github.io/gpu-fluid-lab/navier-stokes.html) ·
 [validation suite](https://az9713.github.io/gpu-fluid-lab/validation.html)
 (locally: serve the folder over HTTP, e.g. `python -m http.server` — ES modules don't load from `file://`).
 
@@ -60,14 +61,17 @@ printed to the page, exposed as `window.__validation`, and logged as a
 ## Layout
 
 ```
-index.html        UI shell
-validation.html   benchmark runner
-src/shaders.js    all WGSL kernels (advection, projection, forces, render)
-src/solver.js     Sim class (buffers, pipelines, step encoding) + presets
-src/webgpu.js     device/buffer/pipeline helpers
-src/validate.js   benchmark implementations
-src/ghia.js       Ghia et al. (1982) reference tables
-src/main.js       UI wiring, mouse, render loop
+index.html            UI shell
+navier-stokes.html    self-contained tutorial: the equations term by term,
+                      derived + specialized per demo (MathJax + inline SVG)
+tools/gen_ns_figs.py  regenerates the tutorial's computed figures
+validation.html       benchmark runner
+src/shaders.js        all WGSL kernels (advection, projection, forces, render)
+src/solver.js         Sim class (buffers, pipelines, step encoding) + presets
+src/webgpu.js         device/buffer/pipeline helpers
+src/validate.js       benchmark implementations
+src/ghia.js           Ghia et al. (1982) reference tables
+src/main.js           UI wiring, mouse, render loop
 ```
 
 ## Notes
