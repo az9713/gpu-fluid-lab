@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPU Fluid Dynamics Lab</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🌀</text></svg>">
+<style>
+  :root {
+    --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+    --muted:#9198a1; --accent:#58a6ff; --cyan:#39c5cf;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  header { display:flex; align-items:baseline; gap:1rem; padding:.7rem 1.2rem;
+    border-bottom:1px solid var(--border); }
+  header h1 { font-size:1.1rem; margin:0; }
+  header .sub { color:var(--muted); font-size:.85rem; }
+  header a { color:var(--accent); font-size:.85rem; margin-left:auto; text-decoration:none; }
+  main { display:flex; gap:1rem; padding:1rem 1.2rem; align-items:flex-start; }
+  #stage { flex:1; min-width:0; }
+  canvas { width:100%; display:block; border:1px solid var(--border);
+    border-radius:8px; background:#000; touch-action:none; }
+  #hint { color:var(--muted); font-size:.8rem; margin-top:.4rem; }
+  #panel { width:270px; flex-shrink:0; background:var(--panel);
+    border:1px solid var(--border); border-radius:10px; padding: .9rem 1rem;
+    font-size:.85rem; display:flex; flex-direction:column; gap:.55rem; }
+  #panel label { display:flex; justify-content:space-between; align-items:center;
+    gap:.5rem; color:var(--muted); }
+  #panel select, #panel input[type=range] { width:150px; accent-color:var(--accent); }
+  select, button { background:#21262d; color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:.25rem .5rem; font-size:.85rem; cursor:pointer; }
+  .row { display:flex; gap:.5rem; }
+  .row button { flex:1; }
+  #fps, #readout { color:var(--cyan); font-size:.8rem; font-family:monospace; min-height:1em; }
+  #nogpu { display:none; margin:2rem; padding:1rem; border:1px solid #ff7b72;
+    border-radius:8px; color:#ff7b72; }
+  #explain { position:fixed; top:0; right:-420px; width:400px; height:100%;
+    background:var(--panel); border-left:1px solid var(--border); padding:1.2rem 1.4rem;
+    transition:right .25s; overflow-y:auto; font-size:.9rem; line-height:1.55; z-index:10; }
+  #explain.open { right:0; }
+  #explain .eq { background:#0a0e14; border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:6px; padding:.5rem .8rem; margin:.8rem 0; font-family:monospace; font-size:.85rem; }
+  #explain a { color:var(--accent); }
+  #explain-close { float:right; }
+</style>
+</head>
+<body>
+<header>
+  <h1>GPU Fluid Dynamics Lab</h1>
+  <span class="sub">Navier–Stokes · WebGPU compute · MAC grid · MacCormack advection</span>
+  <a href="validation.html">validation suite →</a>
+</header>
+<div id="nogpu"></div>
+<main>
+  <div id="stage">
+    <canvas id="view" width="1024" height="512"></canvas>
+    <div id="hint">Left-drag: inject force + dye · Right-drag: paint obstacles</div>
+  </div>
+  <div id="panel">
+    <label>Preset <select id="preset"></select></label>
+    <label>View
+      <select id="mode">
+        <option value="0">Dye</option>
+        <option value="1">Speed</option>
+        <option value="2">Vorticity</option>
+        <option value="3">Pressure</option>
+      </select>
+    </label>
+    <label>Intensity <input type="range" id="intensity" min="0.2" max="3" step="0.1" value="1"></label>
+    <label>Vorticity conf. <input type="range" id="epsVC" min="0" max="0.5" step="0.01" value="0"></label>
+    <label>Pressure iters <input type="range" id="iters" min="10" max="200" step="10" value="50"></label>
+    <label>Steps / frame <input type="range" id="speed" min="1" max="6" step="1" value="2"></label>
+    <label>Brush size <input type="range" id="brush" min="4" max="40" step="1" value="12"></label>
+    <label>Force <input type="range" id="force" min="0" max="4" step="0.1" value="1.5"></label>
+    <label>Dye amount <input type="range" id="dyeAmt" min="0" max="1" step="0.05" value="0.4"></label>
+    <div class="row">
+      <button id="pause">Pause</button>
+      <button id="restart">Restart</button>
+    </div>
+    <div class="row">
+      <button id="clearObs">Clear obstacles</button>
+      <button id="shot">Screenshot</button>
+    </div>
+    <div class="row"><button id="help">Physics explainer</button></div>
+    <div id="fps"></div>
+    <div id="readout"></div>
+  </div>
+</main>
+<aside id="explain">
+  <button id="explain-close">✕</button>
+  <h2 style="margin-top:0">The physics</h2>
+  <div id="explain-body"></div>
+</aside>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

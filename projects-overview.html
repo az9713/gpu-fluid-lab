@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Ambitious Projects — Science, Mathematics &amp; Finance</title>
+<script>
+MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$']] } };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"
+  integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei"
+  crossorigin="anonymous"></script>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #9198a1; --accent: #58a6ff;
+    --gold: #e3b341; --green: #3fb950; --purple: #bc8cff; --red: #ff7b72; --cyan: #39c5cf;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  header { text-align: center; margin-bottom: 3.5rem; }
+  header h1 { font-size: 2.2rem; margin: 0 0 .5rem; letter-spacing: -.02em; }
+  header p.sub { color: var(--muted); font-size: 1.05rem; max-width: 640px; margin: 0 auto; }
+  nav.toc {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.2rem 1.5rem; margin-bottom: 3rem;
+  }
+  nav.toc ol { margin: .3rem 0 0; padding-left: 1.4rem; }
+  nav.toc a { color: var(--accent); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  section.project {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 2rem 2.2rem; margin-bottom: 2.5rem;
+  }
+  section.project h2 { margin: 0 0 .2rem; font-size: 1.55rem; letter-spacing: -.01em; }
+  .tagline { color: var(--muted); font-style: italic; margin: 0 0 1.4rem; }
+  .badges { margin-bottom: 1.2rem; }
+  .badge {
+    display: inline-block; font-size: .75rem; font-weight: 600; letter-spacing: .03em;
+    padding: .18rem .6rem; border-radius: 999px; margin-right: .4rem;
+    border: 1px solid var(--border); color: var(--muted);
+  }
+  .badge.sci { color: var(--cyan); border-color: var(--cyan); }
+  .badge.math { color: var(--purple); border-color: var(--purple); }
+  .badge.fin { color: var(--gold); border-color: var(--gold); }
+  .badge.gpu { color: var(--green); border-color: var(--green); }
+  h3 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: .06em;
+       color: var(--accent); margin: 1.8rem 0 .6rem; }
+  .mjx-container { color: var(--text); }
+  .eqbox {
+    background: #0a0e14; border: 1px solid var(--border); border-left: 3px solid var(--purple);
+    border-radius: 8px; padding: .6rem 1.2rem; margin: 1rem 0; overflow-x: auto;
+  }
+  ul { padding-left: 1.3rem; }
+  li { margin-bottom: .35rem; }
+  code { background: #1f2733; border-radius: 4px; padding: .1rem .35rem; font-size: .9em; }
+  .footer-note {
+    border-top: 1px solid var(--border); margin-top: 3rem; padding-top: 1.5rem;
+    color: var(--muted); font-size: .95rem;
+  }
+  #p1 { border-top: 3px solid var(--red); }
+  #p2 { border-top: 3px solid var(--gold); }
+  #p3 { border-top: 3px solid var(--cyan); }
+  #p4 { border-top: 3px solid var(--green); }
+  #p5 { border-top: 3px solid var(--purple); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Five Ambitious Projects</h1>
+  <p class="sub">Industrial-strength, production-quality builds in science, mathematics and finance —
+  each browser-based (WebGL / WebGPU), each deployable to GitHub Pages, each with visuals worth staring at.</p>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#p1">Black-Hole Ray Tracer — relativistic rendering in Kerr spacetime</a></li>
+    <li><a href="#p2">Market Microstructure Observatory — a living limit order book</a></li>
+    <li><a href="#p3">GPU Fluid Dynamics Lab — real-time Navier–Stokes</a></li>
+    <li><a href="#p4">Options Risk Topography — implied-volatility surfaces &amp; Greeks</a></li>
+    <li><a href="#p5">N-Body Galaxy Collider — a million stars in your browser</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<section class="project" id="p1">
+  <h2>1 · Black-Hole Ray Tracer</h2>
+  <p class="tagline">Bend light itself: a real-time general-relativistic renderer of a spinning black hole.</p>
+  <div class="badges">
+    <span class="badge sci">General Relativity</span>
+    <span class="badge math">Differential Geometry · ODEs</span>
+    <span class="badge gpu">WebGL / GLSL</span>
+  </div>
+
+  <h3>What it is</h3>
+  <p>An interactive renderer that shows what a camera orbiting a rotating (Kerr) black hole would actually see:
+  the warped, doubled image of the accretion disk arching over the shadow, the thin bright photon ring,
+  starfields smeared by gravitational lensing, and the disk glowing hotter and bluer on the side spinning
+  toward you. This is the physics behind the visuals in <em>Interstellar</em> — but computed live, with sliders
+  for black-hole spin, disk temperature, camera inclination and orbit. In plain terms: instead of drawing
+  straight lines from the camera into the scene (ordinary ray tracing), every single ray is a curve, because
+  gravity bends the path light takes. The renderer's job is to integrate each curved path correctly, millions
+  of times per frame, on the GPU.</p>
+
+  <h3>The science</h3>
+  <p>A rotating black hole is described by the <strong>Kerr metric</strong> — the exact solution of Einstein's
+  field equations for a spinning mass, found by Roy Kerr in 1963. In Boyer–Lindquist coordinates
+  \((t, r, \theta, \phi)\), with mass \(M\) and spin parameter \(a = J/M\):</p>
+  <div class="eqbox">
+  $$ds^2 = -\left(1 - \frac{2Mr}{\Sigma}\right)dt^2
+    - \frac{4Mar\sin^2\theta}{\Sigma}\,dt\,d\phi
+    + \frac{\Sigma}{\Delta}dr^2 + \Sigma\, d\theta^2
+    + \left(r^2 + a^2 + \frac{2Ma^2 r \sin^2\theta}{\Sigma}\right)\sin^2\theta \, d\phi^2$$
+  <p style="margin:.4rem 0 0">where \(\Sigma = r^2 + a^2\cos^2\theta\) and \(\Delta = r^2 - 2Mr + a^2\).</p>
+  </div>
+  <p>Light rays are <strong>null geodesics</strong> of this metric — the straightest possible paths through
+  curved spacetime, satisfying the geodesic equation:</p>
+  <div class="eqbox">
+  $$\frac{d^2 x^\mu}{d\lambda^2} + \Gamma^\mu_{\alpha\beta}\frac{dx^\alpha}{d\lambda}\frac{dx^\beta}{d\lambda} = 0$$
+  </div>
+  <p>The Kerr geometry is special: thanks to its symmetries there are enough conserved quantities — energy
+  \(E\), axial angular momentum \(L_z\), and the surprising fourth constant, the <strong>Carter constant</strong>
+  \(Q\) — to reduce the ray equations to first-order form. That's a huge computational gift: fewer equations,
+  better numerical stability, and a built-in correctness check (the constants must stay constant along the ray;
+  if they drift, the integrator is wrong).</p>
+  <p>Three physical effects make the image spectacular, and all fall straight out of the math:</p>
+  <ul>
+    <li><strong>Gravitational lensing.</strong> Light passing near the hole is deflected so strongly you see
+    the <em>far side</em> of the accretion disk bent above and below the shadow, plus higher-order images from
+    rays that loop around once, twice, … producing the nested <em>photon ring</em> near
+    \(r = 3M\) (for zero spin).</li>
+    <li><strong>Relativistic Doppler beaming.</strong> Disk gas orbits at a substantial fraction of light speed.
+    The approaching side gets brighter by a factor \(\delta^{3}\) (with \(\delta\) the Doppler factor) and
+    shifts blue; the receding side dims and reddens. One side of the disk visibly blazes.</li>
+    <li><strong>Gravitational redshift.</strong> Light climbing out of the potential well loses energy, so the
+    inner disk edge is reddened and dimmed by the factor \(\sqrt{-g_{tt}}\) along the path.</li>
+  </ul>
+  <p>Disk color is physical, not painted: each disk annulus radiates as a blackbody with the temperature
+  profile of a <strong>Novikov–Thorne thin disk</strong>, \(T(r) \propto r^{-3/4}\) far out, and the received
+  spectrum is shifted by the combined Doppler + gravitational factor \(g = \nu_{\text{obs}}/\nu_{\text{emit}}\),
+  with intensity transforming as \(I_\nu / \nu^3 = \text{invariant}\).</p>
+
+  <h3>The computation</h3>
+  <ul>
+    <li>Each pixel spawns a ray integrated <em>backwards</em> from the camera through curved spacetime, using an
+    adaptive <strong>Runge–Kutta–Fehlberg (RK45)</strong> integrator written in GLSL — step size shrinks
+    automatically near the hole where curvature is violent, stretches far away where space is nearly flat.</li>
+    <li>Termination logic per ray: hit the disk (accumulate emission), fall through the horizon
+    (\(r_+ = M + \sqrt{M^2 - a^2}\), render black), or escape to infinity (sample the background starfield).</li>
+    <li>Conserved-quantity drift (\(E, L_z, Q\)) is monitored as a live accuracy metric — the test suite
+    asserts drift below tolerance across a grid of camera positions and spins.</li>
+    <li>Production scope: preset tours (Schwarzschild, near-extremal Kerr \(a = 0.998M\), edge-on
+    <em>Interstellar</em> view), camera-path animation with video export, and an explainer overlay that labels
+    the photon ring, the lensed far-side disk, and the beamed bright side as you look at them.</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="project" id="p2">
+  <h2>2 · Market Microstructure Observatory</h2>
+  <p class="tagline">A living, breathing limit order book — simulated from first principles, rendered like weather.</p>
+  <div class="badges">
+    <span class="badge fin">Market Microstructure</span>
+    <span class="badge math">Stochastic Processes · Queueing</span>
+    <span class="badge gpu">WebGL · Agent-Based Simulation</span>
+  </div>
+
+  <h3>What it is</h3>
+  <p>A full electronic-exchange-in-miniature: a matching engine implementing real price–time priority, a
+  population of algorithmic trading agents (market makers, momentum traders, mean-reverters, noise traders)
+  submitting and cancelling orders, and on top of it a visualization layer that treats the order book like a
+  landscape — a 3D depth surface evolving through time, trade executions as particle bursts, liquidity
+  evaporating and refilling like tide. In plain terms: real markets are queues of resting buy and sell orders
+  at each price; every price chart you've ever seen is the thin trace left behind by this much richer object.
+  This project simulates the whole object and lets you watch it.</p>
+
+  <h3>The science</h3>
+  <p>Market microstructure has a set of <strong>stylized facts</strong> — statistical regularities every real
+  market exhibits and that any credible simulator must reproduce. They are the project's validation targets:</p>
+  <ul>
+    <li><strong>Fat-tailed returns.</strong> Price changes are wildly non-Gaussian: the distribution of returns
+    has power-law tails, \(P(|r| > x) \sim x^{-\alpha}\) with \(\alpha \approx 3\) — extreme moves are orders
+    of magnitude more common than a normal distribution predicts.</li>
+    <li><strong>Volatility clustering.</strong> Big moves follow big moves: the autocorrelation of
+    <em>absolute</em> returns \(\text{corr}(|r_t|, |r_{t+\tau}|)\) decays slowly (roughly as a power law),
+    while returns themselves are nearly uncorrelated. Calm and stormy periods bunch together.</li>
+    <li><strong>Square-root market impact.</strong> Executing a large order of volume \(Q\) moves the price not
+    linearly but as
+    $$\Delta p \;\approx\; Y\,\sigma \sqrt{\tfrac{Q}{V}}$$
+    (with \(\sigma\) volatility, \(V\) daily volume) — one of the most robust empirical laws in finance, and
+    remarkably, it emerges from simple order-flow dynamics rather than being imposed.</li>
+    <li><strong>Long-memory order flow.</strong> Buy orders follow buys and sells follow sells, with
+    autocorrelation persisting over thousands of trades — yet prices stay near-unpredictable, because market
+    makers adjust quotes to compensate. The tension between these two facts is the deepest result in the field.</li>
+  </ul>
+  <p>The theoretical backbone is the <strong>zero-intelligence order-book model</strong> (Farmer, Smith et&nbsp;al.):
+  even agents placing random orders — arrivals as Poisson processes with rate \(\lambda\), cancellations at rate
+  \(\delta\), market orders at rate \(\mu\) — generate realistic spreads and depth profiles. Dimensional analysis
+  of these rates predicts the average spread:</p>
+  <div class="eqbox">
+  $$s \;\sim\; \frac{\mu}{\lambda}\, f\!\left(\frac{\delta}{\mu}\right)$$
+  </div>
+  <p>Layering strategic agents on this baseline — market makers managing <strong>inventory risk</strong>
+  (skewing quotes as position accumulates, the Avellaneda–Stoikov framework, where reservation price shifts by
+  \(q\gamma\sigma^2(T-t)\) for inventory \(q\) and risk aversion \(\gamma\)), momentum and mean-reversion
+  traders — turns the statistics from merely plausible to quantitatively realistic, and lets you run
+  experiments: What happens to the book in a flash crash? How does liquidity vanish when market makers pull
+  quotes simultaneously?</p>
+
+  <h3>The computation</h3>
+  <ul>
+    <li><strong>Matching engine</strong>: price–time priority with limit, market, cancel, and
+    immediate-or-cancel order types; \(O(1)\) best-quote access, \(O(\log n)\) insertion. Verified with a
+    property-based test suite (no negative spreads ever, volume conservation, priority never violated,
+    deterministic replay from an event log).</li>
+    <li><strong>Agent scheduler</strong>: discrete-event simulation over a single event clock — hundreds of
+    agents, millions of events per run, fully reproducible from a seed.</li>
+    <li><strong>Validation dashboard</strong>: live QQ-plots of returns against Gaussian, tail-exponent
+    estimation (Hill estimator), autocorrelation curves of \(r_t\) vs \(|r_t|\), and measured impact vs the
+    square-root law — the sim ships with its own evidence.</li>
+    <li><strong>Visual centerpieces</strong>: the 3D book-depth surface scrolling through time like a mountain
+    range; order-flow particles streaming into the book and annihilating at the mid-price; a flash-crash replay
+    mode with time-dilation slider.</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="project" id="p3">
+  <h2>3 · GPU Fluid Dynamics Lab</h2>
+  <p class="tagline">The Navier–Stokes equations, solved sixty times a second, painted in smoke and vortices.</p>
+  <div class="badges">
+    <span class="badge sci">Computational Fluid Dynamics</span>
+    <span class="badge math">Nonlinear PDEs</span>
+    <span class="badge gpu">WebGPU Compute</span>
+  </div>
+
+  <h3>What it is</h3>
+  <p>A real-time two-dimensional fluid simulator running entirely on the GPU: inject dye and forces with the
+  mouse, drop obstacles into a wind tunnel and watch a <strong>Kármán vortex street</strong> peel off behind
+  them, set up a heavy fluid over a light one and watch the <strong>Rayleigh–Taylor instability</strong> grow
+  its mushroom fingers. Render modes switch between dye, velocity field, <em>vorticity</em> (local spin,
+  rendered as glowing filaments), and pressure. In plain terms: the same equations that govern weather,
+  aircraft wings and cream stirred into coffee, running live in a browser tab — and unlike the many toy demos
+  online, this one is checked against published benchmark solutions.</p>
+
+  <h3>The science</h3>
+  <p>Incompressible flow obeys the <strong>Navier–Stokes equations</strong> — Newton's second law written for a
+  continuum, plus the constraint that the fluid doesn't compress:</p>
+  <div class="eqbox">
+  $$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u}
+    = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \mathbf{u} + \mathbf{f},
+    \qquad \nabla\cdot\mathbf{u} = 0$$
+  </div>
+  <p>Each term has a physical job: \((\mathbf{u}\cdot\nabla)\mathbf{u}\) is <em>advection</em> — the fluid
+  carrying its own momentum around, and the source of all the interesting nonlinearity; \(\nabla p\) is the
+  pressure force that enforces incompressibility; \(\nu\nabla^2\mathbf{u}\) is viscous diffusion smearing out
+  sharp features; \(\mathbf{f}\) is you, dragging the mouse. The single dimensionless number
+  <strong>Reynolds number</strong> \(Re = UL/\nu\) controls the regime: low \(Re\) flows are syrupy and
+  reversible, high \(Re\) flows shed vortices and cascade toward turbulence. (Whether smooth solutions always
+  exist in 3D is a Clay Millennium Problem — a nice footnote for the explainer overlay.)</p>
+  <p>The solver uses the classic <strong>operator-splitting</strong> scheme (Chorin projection): advect, diffuse,
+  add forces, then <em>project</em> the velocity field back onto the divergence-free space by solving a Poisson
+  equation for pressure:</p>
+  <div class="eqbox">
+  $$\nabla^2 p = \frac{\rho}{\Delta t}\,\nabla\cdot\mathbf{u}^{*},
+    \qquad \mathbf{u}^{n+1} = \mathbf{u}^{*} - \frac{\Delta t}{\rho}\nabla p$$
+  </div>
+  <p>This works because of the <strong>Helmholtz–Hodge decomposition</strong>: any vector field splits uniquely
+  into a divergence-free part plus a gradient; the pressure solve peels the gradient part off. The industrial
+  upgrade over toy demos is the advection scheme: plain semi-Lagrangian advection (Stam's "Stable Fluids") is
+  unconditionally stable but numerically <em>diffusive</em> — it blurs the very vortices you want to see.
+  This project implements <strong>MacCormack/BFECC</strong> advection: advect forward, advect back, measure the
+  error, correct — second-order accurate, dramatically crisper filaments — plus
+  <strong>vorticity confinement</strong> to re-inject the fine-scale swirl the grid cannot hold, controlled by
+  \(\mathbf{f}_{vc} = \varepsilon\, (\hat{\mathbf{N}} \times \boldsymbol{\omega})\) where
+  \(\boldsymbol{\omega} = \nabla\times\mathbf{u}\).</p>
+
+  <h3>The computation</h3>
+  <ul>
+    <li>Every stage is a <strong>WebGPU compute shader</strong> over staggered (MAC) grid textures — pressure at
+    cell centers, velocity components on faces, which prevents the checkerboard null-mode that plagues naive
+    collocated grids.</li>
+    <li>The Poisson solve uses red–black Gauss–Seidel or a multigrid V-cycle on the GPU — the single biggest
+    cost per frame, and the knob between speed and incompressibility error.</li>
+    <li><strong>Validation suite</strong>: the lid-driven cavity benchmark at \(Re = 100\) and \(Re = 1000\)
+    against the classic Ghia&nbsp;et&nbsp;al. (1982) reference velocity profiles, and vortex-shedding frequency
+    behind a cylinder checked against the empirical Strouhal relation \(St \approx 0.198(1 - 19.7/Re)\).
+    Failing benchmarks fail CI.</li>
+    <li>Scenario presets: wind tunnel with drag/lift readouts, Rayleigh–Taylor, buoyant smoke plume,
+    double-shear-layer instability; screenshot and video export.</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="project" id="p4">
+  <h2>4 · Options Risk Topography</h2>
+  <p class="tagline">The implied-volatility surface as living terrain — and the models that try to explain it.</p>
+  <div class="badges">
+    <span class="badge fin">Derivatives Pricing</span>
+    <span class="badge math">Stochastic Calculus · Optimization</span>
+    <span class="badge gpu">WebGL Surfaces</span>
+  </div>
+
+  <h3>What it is</h3>
+  <p>An options analytics platform rendered as landscape: the implied-volatility surface of an underlying
+  (from historical chain data) drawn as animated 3D terrain over strike and expiry, its smile and skew visible
+  as valleys and ridges; the Greeks of any position drawn as flow-fields over the same terrain; the P&amp;L of
+  arbitrary multi-leg strategies (condors, butterflies, calendars) as topography you can walk through time.
+  Underneath, real model calibration: fit Heston and SABR to the observed surface and render the residuals as
+  a heatmap — literally <em>seeing where the model fails</em>. In plain terms: an option's market price encodes
+  the market's forecast of future turbulence; collect thousands of options and you get a whole surface of
+  forecasts, and its shape — why out-of-the-money puts cost "too much" — is one of the great stories in
+  finance, told here visually.</p>
+
+  <h3>The science</h3>
+  <p>The foundation is <strong>Black–Scholes</strong>: under a lognormal stock model, the no-arbitrage price of
+  a European call satisfies the PDE</p>
+  <div class="eqbox">
+  $$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}
+    + rS\frac{\partial V}{\partial S} - rV = 0$$
+  <p style="margin:.4rem 0 0">with closed-form solution
+  \(C = S\,N(d_1) - Ke^{-rT}N(d_2)\), where
+  \(d_{1,2} = \frac{\ln(S/K) + (r \pm \sigma^2/2)T}{\sigma\sqrt{T}}\).</p>
+  </div>
+  <p><strong>Implied volatility</strong> inverts this: given a market price, find the \(\sigma\) that
+  reproduces it (a 1-D root-find via Newton or rational approximation, done thousands of times per surface).
+  If Black–Scholes were true, the surface would be flat. It isn't — it smiles and skews, steeply for equity
+  puts (the market's memory of 1987) — and that structure is the object of study. Key mathematical layers:</p>
+  <ul>
+    <li><strong>The Greeks</strong> — sensitivities \(\Delta = \partial V/\partial S\),
+    \(\Gamma = \partial^2 V/\partial S^2\), vega \(= \partial V/\partial\sigma\),
+    \(\Theta = \partial V/\partial t\) — the risk coordinates every desk lives in, here rendered as vector and
+    scalar fields over the terrain.</li>
+    <li><strong>Heston model</strong> — variance itself follows a mean-reverting square-root process:
+    $$dS_t = \mu S_t\,dt + \sqrt{v_t}\,S_t\,dW_t^S, \qquad
+      dv_t = \kappa(\bar{v} - v_t)\,dt + \xi\sqrt{v_t}\,dW_t^v, \qquad
+      d\langle W^S, W^v\rangle_t = \rho\,dt$$
+    The negative correlation \(\rho < 0\) generates the skew; pricing goes through the characteristic function
+    and a numerically delicate complex-plane integration (the Heston "little trap" formulation).</li>
+    <li><strong>SABR</strong> — the desk-standard smile model, with the Hagan asymptotic formula giving implied
+    vol in closed form from parameters \((\alpha, \beta, \rho, \nu)\); fast enough to calibrate per-expiry in
+    milliseconds.</li>
+    <li><strong>Calibration</strong> is a genuinely hard nonlinear least-squares problem:
+    $$\min_{\theta}\; \sum_{i} w_i \left(\sigma^{\text{model}}_i(\theta) - \sigma^{\text{mkt}}_i\right)^2$$
+    ill-conditioned, multi-modal, parameter-degenerate — solved with Levenberg–Marquardt plus multi-start, with
+    the Feller condition \(2\kappa\bar{v} \ge \xi^2\) surfaced as a visible constraint.</li>
+    <li><strong>No-arbitrage geometry</strong> — a valid surface can't have butterfly arbitrage (convexity in
+    strike: \(\partial^2 C/\partial K^2 \ge 0\), which is, beautifully, the risk-neutral density by
+    Breeden–Litzenberger) or calendar arbitrage (total variance \(\sigma^2 T\) non-decreasing in \(T\)).
+    Violations in raw data are detected and flagged on the terrain.</li>
+  </ul>
+
+  <h3>The computation</h3>
+  <ul>
+    <li>Vectorized pricing/implied-vol engine (thousands of contracts per frame), Hagan-SABR per expiry,
+    Heston via characteristic-function integration with Gauss–Laguerre quadrature.</li>
+    <li>Surface construction with arbitrage-aware smoothing (SVI parameterization per slice as an option);
+    residual heatmaps of model-vs-market rendered directly on the 3D terrain.</li>
+    <li>Strategy builder: compose legs, see position Greeks aggregate live, scrub time-to-expiry and spot to
+    watch the P&amp;L topography deform.</li>
+    <li>Test suite: put–call parity, Black–Scholes closed-form vs Monte Carlo cross-checks, Heston pricer vs
+    published reference values, calibration recovery tests (synthesize a surface from known parameters, verify
+    the fitter recovers them).</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<section class="project" id="p5">
+  <h2>5 · N-Body Galaxy Collider</h2>
+  <p class="tagline">Gravity, a million times over: colliding galaxies computed and rendered in real time.</p>
+  <div class="badges">
+    <span class="badge sci">Gravitational Dynamics</span>
+    <span class="badge math">Numerical Integration · Tree Algorithms</span>
+    <span class="badge gpu">WebGPU · HDR Rendering</span>
+  </div>
+
+  <h3>What it is</h3>
+  <p>A gravitational N-body simulator pushing a million-plus particles: set two spiral galaxies on a collision
+  course and watch tidal tails unwind over hundreds of millions of simulated years — the Antennae galaxies, or
+  the Milky Way–Andromeda merger due in ~4.5 billion years — rendered with HDR bloom so dense star regions
+  genuinely glow, with time-scrubbing to run the collision backwards and forwards. In plain terms: every star
+  pulls on every other star; with \(N\) stars that's \(N^2\) pulls per step — a million particles would need
+  a trillion force calculations per frame, which is impossible — so the whole project is about the beautiful
+  approximations that make it possible anyway.</p>
+
+  <h3>The science</h3>
+  <p>The system is pure Newton:</p>
+  <div class="eqbox">
+  $$\ddot{\mathbf{r}}_i = -G\sum_{j\neq i} m_j \frac{\mathbf{r}_i - \mathbf{r}_j}
+    {\left(\lVert\mathbf{r}_i - \mathbf{r}_j\rVert^2 + \epsilon^2\right)^{3/2}}$$
+  </div>
+  <p>The \(\epsilon\) is the <strong>softening length</strong> — it caps the force between very close particles.
+  It's not a hack: each particle represents thousands of real stars, and softening encodes that a star cluster
+  isn't a point mass. Too small and close encounters explode the integrator; too large and structure blurs.
+  The docs treat this tradeoff honestly, with the standard rule-of-thumb scaling
+  \(\epsilon \sim R\, N^{-1/3}\).</p>
+  <p>Three pieces of serious math make it work:</p>
+  <ul>
+    <li><strong>Barnes–Hut tree algorithm.</strong> Recursively divide space into an octree; for a distant
+    cluster of stars, use its center of mass instead of every member. A cell of size \(s\) at distance \(d\)
+    is "distant enough" when \(s/d < \theta\) (opening angle, typically \(\theta \approx 0.5\)). Cost drops
+    from \(O(N^2)\) to \(O(N \log N)\) — the difference between impossible and interactive. (The GPU-friendly
+    alternative — all-pairs in shared-memory tiles — is exact and brutally parallel; the project benchmarks
+    both.)</li>
+    <li><strong>Symplectic integration.</strong> Ordinary integrators (Euler, RK4) slowly leak or gain energy,
+    and over thousands of orbital periods a galaxy artificially evaporates or collapses. The
+    <strong>leapfrog / kick–drift–kick</strong> scheme
+    $$\mathbf{v}_{1/2} = \mathbf{v}_0 + \tfrac{\Delta t}{2}\mathbf{a}_0, \qquad
+      \mathbf{r}_1 = \mathbf{r}_0 + \Delta t\,\mathbf{v}_{1/2}, \qquad
+      \mathbf{v}_1 = \mathbf{v}_{1/2} + \tfrac{\Delta t}{2}\mathbf{a}_1$$
+    is <em>symplectic</em>: it exactly conserves a slightly-perturbed energy, so the true energy oscillates in
+    a bounded band forever instead of drifting. Same cost as naive integration; vastly better physics.
+    A live energy-drift monitor \(|\Delta E / E_0|\) is rendered on screen as the honesty meter.</li>
+    <li><strong>Galaxy initial conditions.</strong> You can't scatter stars randomly and call it a galaxy — it
+    must start in dynamical equilibrium or it instantly rings and relaxes into the wrong shape. Disks are
+    initialized with exponential surface density \(\Sigma(R) = \Sigma_0 e^{-R/R_d}\), circular velocities from
+    the enclosed mass (including a dark-matter halo term — this is exactly the flat-rotation-curve evidence for
+    dark matter), and velocity dispersion set by the <strong>Toomre stability criterion</strong>
+    $$Q = \frac{\sigma_R\,\kappa}{3.36\,G\,\Sigma} \gtrsim 1$$
+    so the disk neither shatters into clumps (\(Q < 1\)) nor becomes too hot to form spiral structure.</li>
+  </ul>
+  <p>The payoff physics: <strong>tidal tails</strong> (the long streamers in every merger photo) emerge
+  naturally from differential gravity during close passage; <strong>dynamical friction</strong> gradually sinks
+  the two cores into a single merged elliptical — you watch morphology transform, the actual mechanism by which
+  the universe builds elliptical galaxies.</p>
+
+  <h3>The computation</h3>
+  <ul>
+    <li>WebGPU compute pipeline: tiled all-pairs kernel for exactness at \(N \le 10^5\); Barnes–Hut octree
+    (built on CPU or GPU) for \(N \ge 10^6\); fixed-timestep leapfrog with per-preset \(\Delta t\).</li>
+    <li>HDR rendering: additive-blended point sprites → bloom (bright-pass + Gaussian pyramid) → filmic
+    tonemapping; color by stellar population or by local velocity for a shockwave view.</li>
+    <li>Presets: Antennae (NGC 4038/39), MW–Andromeda, retrograde vs prograde encounters (dramatically
+    different tail structure — a genuine 1972 Toomre &amp; Toomre result), plummer-sphere cluster collapse.</li>
+    <li>Tests: two-body circular orbit closes on itself to tolerance; energy drift bounded over \(10^4\) steps;
+    momentum conserved to floating-point tolerance; Toomre-\(Q\) verified on generated initial conditions.</li>
+  </ul>
+</section>
+
+<div class="footer-note">
+  <strong>Common engineering spine.</strong> All five share the same production skeleton: browser-native
+  (WebGL2 or WebGPU, no install), deployable as static sites to GitHub Pages, each with a physics/math
+  explainer overlay, preset scenario tours, screenshot/video export, and — the industrial-strength part —
+  a validation suite asserting the science (conserved quantities, benchmark solutions, stylized facts,
+  no-arbitrage constraints) rather than just "it renders".
+  <br><br>
+  <em>Note: equations render via MathJax from a CDN — open this file while online.</em>
+</div>
+
+</div>
+</body>
+</html>

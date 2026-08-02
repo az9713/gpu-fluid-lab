@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fluid Lab — Validation Suite</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🌀</text></svg>">
+<style>
+  body { margin:0; background:#0d1117; color:#e6edf3; font-family:ui-monospace,Consolas,monospace;
+    padding:2rem; font-size:.9rem; line-height:1.5; }
+  h1 { font-size:1.2rem; font-family:-apple-system,"Segoe UI",sans-serif; }
+  a { color:#58a6ff; }
+  #status { padding:.6rem 1rem; border-radius:8px; border:1px solid #30363d; margin:1rem 0; }
+  #status.pass { border-color:#3fb950; color:#3fb950; }
+  #status.fail { border-color:#ff7b72; color:#ff7b72; }
+  pre { white-space:pre-wrap; color:#9198a1; }
+</style>
+</head>
+<body>
+<h1>GPU Fluid Dynamics Lab — validation suite <a href="index.html" style="float:right;font-weight:normal">← back to lab</a></h1>
+<p>Benchmarks the solver against published references: Ghia et&nbsp;al. (1982) lid-driven cavity
+centerline profiles at Re=100 and Re=1000, vortex-shedding Strouhal number vs the empirical
+relation St = 0.198(1 − 19.7/Re), and pressure-projection divergence removal.
+Runs take a few minutes; progress below. Append <code>?fast</code> for a quick smoke run.</p>
+<div id="status">running…</div>
+<pre id="log"></pre>
+<script type="module" src="src/validate.js"></script>
+</body>
+</html>
